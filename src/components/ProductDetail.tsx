@@ -7,7 +7,6 @@ import {
   RotateCcw,
   Check,
   Heart,
-  Scale,
   ShoppingCart,
   Share2,
   Plus,
@@ -29,8 +28,6 @@ export const ProductDetail: React.FC<{ product: Product }> = ({ product }) => {
     addToCart,
     toggleWishlist,
     isInWishlist,
-    addToCompare,
-    isComparing,
     formatBDT,
     products,
     openProductDetail,
@@ -68,7 +65,6 @@ export const ProductDetail: React.FC<{ product: Product }> = ({ product }) => {
   ]);
 
   const isWish = isInWishlist(product.id);
-  const isComp = isComparing(product.id);
 
   // Bundle recommendation (e.g. keyboard + mouse or fan + cable)
   const bundleProduct = products.find(p => p.id !== product.id && p.category !== product.category) || products[0];
@@ -374,16 +370,6 @@ export const ProductDetail: React.FC<{ product: Product }> = ({ product }) => {
                 >
                   <Heart className={`w-4 h-4 ${isWish ? 'fill-current' : ''}`} />
                   <span>{isWish ? 'In Wishlist' : 'Add to Wishlist'}</span>
-                </button>
-
-                <button
-                  onClick={() => addToCompare(product)}
-                  className={`flex items-center gap-1.5 transition-colors ${
-                    isComp ? 'text-[#00D4FF] font-semibold' : 'hover:text-white'
-                  }`}
-                >
-                  <Scale className="w-4 h-4" />
-                  <span>{isComp ? 'In Compare List' : 'Add to Compare'}</span>
                 </button>
 
                 <button

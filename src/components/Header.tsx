@@ -3,7 +3,6 @@ import {
   Search,
   ShoppingCart,
   Heart,
-  Scale,
   User,
   ShieldCheck,
   Menu,
@@ -25,7 +24,6 @@ export const Header: React.FC = () => {
     cartTotalCount,
     setIsCartDrawerOpen,
     wishlist,
-    compareList,
     language,
     setLanguage,
     t,
@@ -317,21 +315,6 @@ export const Header: React.FC = () => {
             )}
           </button>
 
-          {/* Compare */}
-          <button
-            onClick={() => setCurrentView('compare')}
-            aria-label="Compare Products"
-            className="hidden md:inline-flex relative p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors"
-            title={t('compare')}
-          >
-            <Scale className="w-5 h-5" />
-            {compareList.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-cyan-500 text-slate-950 text-[10px] font-bold flex items-center justify-center">
-                {compareList.length}
-              </span>
-            )}
-          </button>
-
           {/* Account & Login Button */}
           {currentUser ? (
             <div ref={userMenuRef} className="relative">
@@ -534,14 +517,6 @@ export const Header: React.FC = () => {
               <span>{language === 'bn' ? 'স্পেশাল ডিলস' : 'Deals & Bundles'}</span>
             </button>
           </div>
-
-          <button
-            onClick={() => setCurrentView('compare')}
-            className="text-slate-400 hover:text-white transition-colors flex items-center gap-1 shrink-0"
-          >
-            <Scale className="w-3 h-3 text-[#00D4FF]" />
-            <span>{t('compare')} ({compareList.length})</span>
-          </button>
         </div>
       </div>
 

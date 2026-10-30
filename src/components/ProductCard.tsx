@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, Heart, Eye, Scale, Star, Check } from 'lucide-react';
+import { ShoppingCart, Heart, Eye, Star } from 'lucide-react';
 import { Product } from '../types';
 import { useApp } from '../context/AppContext';
 import { getSafeImageSrc, DEFAULT_PRODUCT_IMAGE, handleImageError } from '../utils/imageUtils';
@@ -16,14 +16,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     addToCart,
     toggleWishlist,
     isInWishlist,
-    addToCompare,
-    isComparing,
     formatBDT,
     language
   } = useApp();
 
   const isWish = isInWishlist(product.id);
-  const isComp = isComparing(product.id);
 
   return (
     <div className="group relative flex flex-col justify-between rounded-xl bg-[#08172B]/70 border border-slate-800/90 hover:border-[#168BFF]/50 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-[#168BFF]/10">
@@ -93,21 +90,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <Eye className="w-4 h-4" />
           </button>
 
-          {/* Compare */}
-          <button
-            onClick={e => {
-              e.stopPropagation();
-              addToCompare(product);
-            }}
-            aria-label="Compare"
-            className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 duration-200 ${
-              isComp
-                ? 'bg-cyan-500 text-slate-950 font-bold'
-                : 'bg-[#050914]/80 text-slate-300 hover:text-cyan-400 hover:bg-[#050914] backdrop-blur-sm border border-slate-700/60'
-            }`}
-          >
-            {isComp ? <Check className="w-4 h-4" /> : <Scale className="w-4 h-4" />}
-          </button>
         </div>
       </div>
 

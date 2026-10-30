@@ -113,10 +113,10 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <button
-                  onClick={() => setCurrentView('compare')}
+                  onClick={() => setCurrentView('account')}
                   className="hover:text-white transition-colors"
                 >
-                  Compare Accessories
+                  My Orders & Profile
                 </button>
               </li>
               <li>

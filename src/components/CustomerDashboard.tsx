@@ -3,7 +3,6 @@ import {
   User,
   ShoppingBag,
   Heart,
-  Scale,
   MapPin,
   Lock,
   RotateCcw,
@@ -30,8 +29,6 @@ export const CustomerDashboard: React.FC = () => {
     products,
     toggleWishlist,
     addToCart,
-    compareList,
-    removeFromCompare,
     formatBDT,
     setInvoiceOrder,
     openProductDetail,
@@ -61,11 +58,31 @@ export const CustomerDashboard: React.FC = () => {
     }
   }, [currentUser]);
 
+  // Filter orders strictly for the current logged-in user (unless admin)
+  const userOrders = React.useMemo(() => {
+    if (!currentUser) return [];
+    if (isAdmin) return orders;
+    return orders.filter(o => {
+      const idMatch = Boolean(o.userId && o.userId === currentUser.id);
+      const emailMatch = Boolean(currentUser.email && o.shipping?.email && o.shipping.email.trim().toLowerCase() === currentUser.email.trim().toLowerCase());
+      const userPhoneClean = currentUser.phone ? currentUser.phone.replace(/[\s-]/g, '') : '';
+      const orderPhoneClean = o.shipping?.phone ? o.shipping.phone.replace(/[\s-]/g, '') : '';
+      const phoneMatch = Boolean(userPhoneClean && orderPhoneClean && (userPhoneClean === orderPhoneClean || userPhoneClean.endsWith(orderPhoneClean) || orderPhoneClean.endsWith(userPhoneClean)));
+      return idMatch || emailMatch || phoneMatch;
+    });
+  }, [orders, currentUser, isAdmin]);
+
   // Warranty form state
-  const [claimOrderId, setClaimOrderId] = useState(orders[0]?.id || '');
+  const [claimOrderId, setClaimOrderId] = useState('');
   const [claimReason, setClaimReason] = useState('Hardware Fault / Defect');
   const [claimDescription, setClaimDescription] = useState('');
   const [warrantySubmitted, setWarrantySubmitted] = useState(false);
+
+  React.useEffect(() => {
+    if (userOrders.length > 0 && !claimOrderId) {
+      setClaimOrderId(userOrders[0].id);
+    }
+  }, [userOrders, claimOrderId]);
 
   // Wishlist products
   const wishlistedProducts = products.filter(p => wishlist.includes(p.id));
@@ -79,6 +96,55 @@ export const CustomerDashboard: React.FC = () => {
     setWarrantySubmitted(true);
     showToast('Warranty claim ticket #WR-4920 submitted! Our technical support team will contact you within 24 hours.', 'success');
   };
+
+  // If user is not logged in, enforce login/registration gate so order history cannot be seen
+  if (!currentUser) {
+    return (
+      <div className="py-16 sm:py-24 bg-[#050914] min-h-[75vh] flex items-center justify-center px-4 sm:px-6">
+        <div className="max-w-md w-full bg-[#08172B] border border-slate-800 rounded-3xl p-8 sm:p-10 text-center space-y-6 shadow-2xl relative">
+          <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-[#168BFF]/20 to-[#00D4FF]/20 border border-[#168BFF]/40 flex items-center justify-center text-[#00D4FF] shadow-inner">
+            <Lock className="w-10 h-10" />
+          </div>
+
+          <div className="space-y-2">
+            <h2 className="text-xl sm:text-2xl font-black text-white">
+              {language === 'bn' ? 'অ্যাকাউন্টে লগইন প্রয়োজন' : 'Sign In Required'}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              {language === 'bn'
+                ? 'আপনার অর্ডার হিস্টরি, পার্সেল ট্র্যাকিং ও প্রোফাইল দেখতে দয়া করে আপনার অ্যাকাউন্টে লগইন করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।'
+                : 'Please sign in or create an account to view your personal order history, live parcel tracking, and profile.'}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 pt-2">
+            <button
+              onClick={() => openAuthModal('login')}
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#168BFF] to-[#00D4FF] hover:from-[#1272d4] hover:to-[#00b4d8] text-white text-xs font-bold shadow-lg shadow-[#168BFF]/25 flex items-center justify-center gap-2 transition-all transform active:scale-95"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>{language === 'bn' ? 'লগইন করুন' : 'Sign In'}</span>
+            </button>
+
+            <button
+              onClick={() => openAuthModal('register')}
+              className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 transition-all"
+            >
+              <User className="w-4 h-4 text-[#00D4FF]" />
+              <span>{language === 'bn' ? 'নতুন অ্যাকাউন্ট খুলুন' : 'Create New Account'}</span>
+            </button>
+
+            <button
+              onClick={() => setCurrentView('shop')}
+              className="pt-2 text-xs text-slate-400 hover:text-white transition-colors"
+            >
+              {language === 'bn' ? '← শপে ফিরে যান' : '← Continue Shopping'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-8 bg-[#050914] min-h-screen">
@@ -166,7 +232,7 @@ export const CustomerDashboard: React.FC = () => {
                 <ShoppingBag className="w-4 h-4" />
                 <span>Order History</span>
               </div>
-              <span className="tabular-nums px-1.5 py-0.2 rounded bg-black/20 text-[10px]">{orders.length}</span>
+              <span className="tabular-nums px-1.5 py-0.2 rounded bg-black/20 text-[10px]">{userOrders.length}</span>
             </button>
 
             <button
@@ -233,17 +299,38 @@ export const CustomerDashboard: React.FC = () => {
             {activeTab === 'orders' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-white">Your Orders & Tracking</h3>
-                  <span className="text-xs text-slate-400">{orders.length} total orders</span>
+                  <h3 className="text-lg font-bold text-white">
+                    {language === 'bn' ? 'আপনার অর্ডার ও ট্র্যাকিং' : 'Your Orders & Tracking'}
+                  </h3>
+                  <span className="text-xs text-slate-400">
+                    {userOrders.length} {language === 'bn' ? 'টি অর্ডার' : 'total orders'}
+                  </span>
                 </div>
 
-                {orders.length === 0 ? (
-                  <div className="p-12 text-center rounded-2xl bg-[#08172B]/60 border border-slate-800 space-y-3">
-                    <ShoppingBag className="w-10 h-10 text-slate-600 mx-auto" />
-                    <p className="text-xs text-slate-400">No orders placed yet.</p>
+                {userOrders.length === 0 ? (
+                  <div className="p-10 sm:p-14 text-center rounded-2xl bg-[#08172B]/60 border border-slate-800 space-y-4">
+                    <div className="w-16 h-16 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500">
+                      <ShoppingBag className="w-8 h-8" />
+                    </div>
+                    <div className="space-y-1.5 max-w-md mx-auto">
+                      <h4 className="text-sm font-bold text-white">
+                        {language === 'bn' ? 'এখনও কোনো অর্ডার করেননি' : 'No Orders Placed Yet'}
+                      </h4>
+                      <p className="text-xs text-slate-400 leading-relaxed">
+                        {language === 'bn'
+                          ? 'শপ থেকে অর্ডার সম্পন্ন করলে আপনার অর্ডারের ইনভয়েস, ডেলিভারি ট্র্যাকিং ও বিস্তারিত হিস্টরি এখানে স্বয়ংক্রিয়ভাবে চলে আসবে।'
+                          : 'When you place an order, your order invoice, parcel delivery status, and tracking history will appear here.'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setCurrentView('shop')}
+                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#168BFF] to-[#00D4FF] hover:from-[#1272d4] hover:to-[#00b4d8] text-white text-xs font-bold inline-flex items-center gap-2 shadow-lg shadow-[#168BFF]/20"
+                    >
+                      <span>{language === 'bn' ? 'শপে গিয়ে পণ্য পছন্দ করুন' : 'Browse Products'}</span>
+                    </button>
                   </div>
                 ) : (
-                  orders.map(order => (
+                  userOrders.map(order => (
                     <div
                       key={order.id}
                       className="p-6 rounded-2xl bg-[#08172B]/70 border border-slate-800 space-y-4 shadow-sm"
@@ -494,9 +581,13 @@ export const CustomerDashboard: React.FC = () => {
                           onChange={e => setClaimOrderId(e.target.value)}
                           className="w-full bg-slate-900 border border-slate-700 text-xs text-white p-2.5 rounded-lg"
                         >
-                          {orders.map(o => (
-                            <option key={o.id} value={o.id}>Order #{o.id} ({formatBDT(o.total)})</option>
-                          ))}
+                          {userOrders.length === 0 ? (
+                            <option value="">{language === 'bn' ? 'কোনো অর্ডার পাওয়া যায়নি' : 'No orders found'}</option>
+                          ) : (
+                            userOrders.map(o => (
+                              <option key={o.id} value={o.id}>Order #{o.id} ({formatBDT(o.total)})</option>
+                            ))
+                          )}
                         </select>
                       </div>
 

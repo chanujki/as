@@ -236,139 +236,7 @@ const INITIAL_SETTINGS: StoreSettings = {
   themePreset: 'cyber-blue',
 };
 
-const INITIAL_ORDERS: Order[] = [
-  {
-    id: 'ASC-89421',
-    trackingNumber: 'BD-8842109',
-    courierName: 'Steadfast Courier',
-    items: [
-      {
-        productId: 'prod-01',
-        productName: 'Vortex Pro 75% Wireless Mechanical Keyboard',
-        productSku: 'ASC-KB-980',
-        price: 4850,
-        quantity: 1,
-        variant: 'Linear Yellow (Smooth)',
-        thumbnail: '/images/category_mechanical_keyboard_1793020164307.jpg'
-      }
-    ],
-    shipping: {
-      fullName: 'Customer Order #1',
-      phone: '017XXXXXXXX',
-      email: 'order1@ascomputer.com',
-      division: 'Dhaka',
-      district: 'Dhaka (Dhanmondi)',
-      address: 'Dhanmondi, Dhaka',
-    },
-    subtotal: 4850,
-    shippingFee: 0,
-    discount: 0,
-    total: 4850,
-    paymentMethod: 'cod',
-    paymentStatus: 'Pending',
-    orderStatus: 'Pending',
-    createdAt: '2026-10-26T06:15:00Z',
-    updatedAt: '2026-10-26T06:15:00Z'
-  },
-  {
-    id: 'ASC-78214',
-    trackingNumber: 'ST-9923812',
-    courierName: 'Steadfast Courier',
-    items: [
-      {
-        productId: 'prod-03',
-        productName: 'TitanLink 12-in-1 USB-C Multiport Docking Station',
-        productSku: 'ASC-HUB-121',
-        price: 4200,
-        quantity: 1,
-        thumbnail: '/images/category_usbc_docking_hub_1793020166283.jpg'
-      }
-    ],
-    shipping: {
-      fullName: 'Customer Order #2',
-      phone: '018XXXXXXXX',
-      email: 'order2@ascomputer.com',
-      division: 'Dhaka',
-      district: 'Dhaka (Banani)',
-      address: 'Mirpur DOHS, Dhaka',
-    },
-    subtotal: 4200,
-    shippingFee: 0,
-    discount: 0,
-    total: 4200,
-    paymentMethod: 'bkash',
-    paymentStatus: 'Paid',
-    orderStatus: 'Accepted',
-    createdAt: '2026-10-25T14:32:00Z',
-    updatedAt: '2026-10-25T15:10:00Z'
-  },
-  {
-    id: 'ASC-78190',
-    trackingNumber: 'PT-8827361',
-    courierName: 'Pathao Courier',
-    items: [
-      {
-        productId: 'prod-04',
-        productName: 'AeroFlow Turbo Desktop Rechargeable Oscillating Mini Fan',
-        productSku: 'ASC-FAN-350',
-        price: 1650,
-        quantity: 2,
-        variant: 'Space Gray',
-        thumbnail: '/images/category_cooling_fan_1793020166097.jpg'
-      }
-    ],
-    shipping: {
-      fullName: 'Customer Order #3',
-      phone: '019XXXXXXXX',
-      email: 'order3@ascomputer.com',
-      division: 'Chattogram',
-      district: 'Chattogram (Panchlaish)',
-      address: 'Hillview R/A, Chattogram',
-    },
-    subtotal: 3300,
-    shippingFee: 0,
-    discount: 200,
-    total: 3100,
-    paymentMethod: 'cod',
-    paymentStatus: 'Pending',
-    orderStatus: 'Delivered',
-    createdAt: '2026-10-21T09:12:00Z',
-    updatedAt: '2026-10-23T16:45:00Z'
-  },
-  {
-    id: 'ASC-77901',
-    trackingNumber: 'RJ-1029381',
-    courierName: 'RedX Express',
-    items: [
-      {
-        productId: 'prod-02',
-        productName: 'AeroSound Nova Over-Ear Wireless Studio Headphones',
-        productSku: 'ASC-AUD-770',
-        price: 6490,
-        quantity: 1,
-        thumbnail: '/images/category_headphones_audio_1793020166252.jpg'
-      }
-    ],
-    shipping: {
-      fullName: 'Customer Order #4',
-      phone: '016XXXXXXXX',
-      email: 'order4@ascomputer.com',
-      division: 'Sylhet',
-      district: 'Sylhet City',
-      address: 'Zindabazar, Sylhet',
-    },
-    subtotal: 6490,
-    shippingFee: 120,
-    discount: 0,
-    total: 6610,
-    paymentMethod: 'cod',
-    paymentStatus: 'Failed',
-    orderStatus: 'Rejected',
-    createdAt: '2026-10-20T11:00:00Z',
-    updatedAt: '2026-10-20T12:30:00Z',
-    notes: 'Customer cancelled the request over phone verification.'
-  }
-];
+const INITIAL_ORDERS: Order[] = [];
 
 export const ADMIN_EMAIL = 'mdrakibhasanrion404@gmail.com';
 
@@ -444,21 +312,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (saved) {
       try {
         const parsed: Order[] = JSON.parse(saved);
-        const hasOldPersonalData = parsed.some(
-          o => o.shipping?.fullName?.toLowerCase().includes('mahir') ||
-               o.shipping?.fullName?.toLowerCase().includes('kamrul') ||
-               o.shipping?.phone?.includes('01712345678')
-        );
-        if (hasOldPersonalData) {
-          localStorage.setItem('as_orders', JSON.stringify(INITIAL_ORDERS));
-          return INITIAL_ORDERS;
-        }
-        return parsed;
+        // Purge mock demo orders and keep only real orders placed by authenticated customers
+        const realOrders = Array.isArray(parsed)
+          ? parsed.filter(o => 
+              o &&
+              !o.id.startsWith('ASC-89421') &&
+              !o.id.startsWith('ASC-78214') &&
+              !o.id.startsWith('ASC-78190') &&
+              !o.id.startsWith('ASC-77901') &&
+              !o.shipping?.fullName?.toLowerCase().includes('customer order') &&
+              !o.shipping?.email?.includes('@ascomputer.com')
+            )
+          : [];
+        localStorage.setItem('as_orders', JSON.stringify(realOrders));
+        return realOrders;
       } catch {
-        return INITIAL_ORDERS;
+        return [];
       }
     }
-    return INITIAL_ORDERS;
+    return [];
   });
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
   const [invoiceOrder, setInvoiceOrder] = useState<Order | null>(null);
