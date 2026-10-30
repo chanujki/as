@@ -66,9 +66,6 @@ export const ProductDetail: React.FC<{ product: Product }> = ({ product }) => {
 
   const isWish = isInWishlist(product.id);
 
-  // Bundle recommendation (e.g. keyboard + mouse or fan + cable)
-  const bundleProduct = products.find(p => p.id !== product.id && p.category !== product.category) || products[0];
-
   const handleAddReview = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newReviewName.trim() || !newReviewComment.trim()) {
@@ -111,12 +108,6 @@ export const ProductDetail: React.FC<{ product: Product }> = ({ product }) => {
     addToCart(product, quantity, selectedVariant);
     setCurrentView('checkout');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleAddBundle = () => {
-    addToCart(product, 1, selectedVariant);
-    addToCart(bundleProduct, 1);
-    showToast('Bundle added to your cart with combo savings!', 'success');
   };
 
   const relatedProducts = products
@@ -447,62 +438,6 @@ export const ProductDetail: React.FC<{ product: Product }> = ({ product }) => {
                   </div>
                 );
               })()}
-            </div>
-          </div>
-        </div>
-
-        {/* Frequently Bought Together Bundle */}
-        <div className="p-6 rounded-2xl bg-gradient-to-r from-[#08172B] via-[#0c1c36] to-[#08172B] border border-slate-800 space-y-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
-            <Sparkles className="w-4 h-4" />
-            <span>Frequently Bought Together</span>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4 flex-wrap">
-              <div className="flex items-center gap-3">
-                <img
-                  src={getSafeImageSrc(product.thumbnail, DEFAULT_PRODUCT_IMAGE)}
-                  alt={product.name}
-                  referrerPolicy="no-referrer"
-                  className="w-16 h-16 object-cover rounded-lg bg-slate-900 border border-slate-700"
-                />
-                <div>
-                  <p className="text-xs font-bold text-white max-w-[200px] truncate">{product.name}</p>
-                  <p className="text-xs text-[#00D4FF] font-semibold tabular-nums">{formatBDT(product.price)}</p>
-                </div>
-              </div>
-
-              <span className="text-lg font-bold text-slate-500">+</span>
-
-              <div className="flex items-center gap-3">
-                <img
-                  src={getSafeImageSrc(bundleProduct.thumbnail, DEFAULT_PRODUCT_IMAGE)}
-                  alt={bundleProduct.name}
-                  referrerPolicy="no-referrer"
-                  className="w-16 h-16 object-cover rounded-lg bg-slate-900 border border-slate-700"
-                />
-                <div>
-                  <p className="text-xs font-bold text-white max-w-[200px] truncate">{bundleProduct.name}</p>
-                  <p className="text-xs text-[#00D4FF] font-semibold tabular-nums">{formatBDT(bundleProduct.price)}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-xs text-slate-400">Combo Total</p>
-                <p className="text-xl font-bold text-white tabular-nums">
-                  {formatBDT(product.price + bundleProduct.price)}
-                </p>
-              </div>
-
-              <button
-                onClick={handleAddBundle}
-                className="px-5 py-2.5 rounded-lg bg-[#168BFF] hover:bg-[#1272d4] text-white text-xs font-bold shadow-md transition-all whitespace-nowrap"
-              >
-                Add Both to Cart
-              </button>
             </div>
           </div>
         </div>
