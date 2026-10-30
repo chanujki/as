@@ -1,0 +1,77 @@
+{
+  "entities": {
+    "products": {
+      "title": "Products",
+      "description": "Store products including computer accessories, components, and pricing",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "nameBn": { "type": "string" },
+        "sku": { "type": "string" },
+        "brand": { "type": "string" },
+        "category": { "type": "string" },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "stock": { "type": "number" },
+        "description": { "type": "string" },
+        "images": { "type": "array" },
+        "thumbnail": { "type": "string" },
+        "warranty": { "type": "string" },
+        "returnPolicy": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "price", "category"]
+    },
+    "orders": {
+      "title": "Orders",
+      "description": "Customer purchase orders",
+      "type": "object",
+      "properties": {
+        "trackingNumber": { "type": "string" },
+        "items": { "type": "array" },
+        "shipping": { "type": "object" },
+        "subtotal": { "type": "number" },
+        "shippingFee": { "type": "number" },
+        "discount": { "type": "number" },
+        "total": { "type": "number" },
+        "paymentMethod": { "type": "string" },
+        "paymentStatus": { "type": "string" },
+        "orderStatus": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["items", "shipping", "total", "orderStatus"]
+    },
+    "chat_messages": {
+      "title": "Chat Messages",
+      "description": "Real-time support chat messages between customers and store admins",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderPhone": { "type": "string" },
+        "text": { "type": "string" },
+        "isAdmin": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["sessionId", "text", "createdAt"]
+    },
+    "settings": {
+      "title": "Store Settings",
+      "description": "Store configuration including banners, notice bar, theme colors, and contacts",
+      "type": "object",
+      "properties": {
+        "noticeText": { "type": "string" },
+        "noticeBadgeText": { "type": "string" },
+        "noticeEnabled": { "type": "boolean" },
+        "noticeBgColor": { "type": "string" },
+        "banners": { "type": "array" },
+        "themePrimary": { "type": "string" },
+        "themeAccent": { "type": "string" },
+        "supportPhone": { "type": "string" },
+        "supportEmail": { "type": "string" }
+      }
+    }
+  }
+}

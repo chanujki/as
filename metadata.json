@@ -1,0 +1,6 @@
+{
+  "name": "AS Computer — Premium Dark Tech E-Commerce",
+  "description": "Power Your Digital World. Premium computer accessories, electronics accessories, cooling gear, audio, and everyday tech gadgets in Bangladesh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

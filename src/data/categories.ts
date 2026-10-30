@@ -1,0 +1,158 @@
+import { ProductCategory } from '../types';
+
+export interface CategoryInfo {
+  id: ProductCategory;
+  name: string;
+  nameBn: string;
+  description: string;
+  iconName: string;
+  itemCount: number;
+  featuredImage: string;
+}
+
+export const CATEGORIES: CategoryInfo[] = [
+  {
+    id: 'mini-fans',
+    name: 'Mini Fans',
+    nameBn: 'মিনি ফ্যান',
+    description: 'USB mini fans, rechargeable desk fans & clip-on cooling',
+    iconName: 'Fan',
+    itemCount: 24,
+    featuredImage: '/images/category_cooling_fan_1793020166097.jpg',
+  },
+  {
+    id: 'cables-connectors',
+    name: 'Cables & Connectors',
+    nameBn: 'কেবল ও কানেক্টর',
+    description: 'High-speed USB-C, HDMI 2.1, DisplayPort, AUX & Ethernet cables',
+    iconName: 'Cable',
+    itemCount: 86,
+    featuredImage: '/images/category_usbc_docking_hub_1793020166283.jpg',
+  },
+  {
+    id: 'power-charging',
+    name: 'Power & Charging',
+    nameBn: 'পাওয়ার ও চার্জিং',
+    description: 'GaN fast chargers, surge protectors, PC power supplies & power banks',
+    iconName: 'Zap',
+    itemCount: 48,
+    featuredImage: '/images/category_usbc_docking_hub_1793020166283.jpg',
+  },
+  {
+    id: 'headphones-audio',
+    name: 'Headphones & Audio',
+    nameBn: 'হেডফোন ও অডিও',
+    description: 'Studio wireless headphones, gaming headsets, DACs & desktop speakers',
+    iconName: 'Headphones',
+    itemCount: 52,
+    featuredImage: '/images/category_headphones_audio_1793020166252.jpg',
+  },
+  {
+    id: 'computer-accessories',
+    name: 'Computer Accessories',
+    nameBn: 'কম্পিউটার এক্সেসরিজ',
+    description: 'Mechanical keyboards, wireless mice, desk mats, webcams & USB hubs',
+    iconName: 'Keyboard',
+    itemCount: 94,
+    featuredImage: '/images/category_mechanical_keyboard_1793020164307.jpg',
+  },
+  {
+    id: 'pc-components',
+    name: 'PC Components',
+    nameBn: 'পিসি কম্পোনেন্টস',
+    description: 'High-speed DDR5 RAM, PCIe 4.0 SSDs, CPU coolers, thermal paste & cases',
+    iconName: 'Cpu',
+    itemCount: 65,
+    featuredImage: '/images/hero_setup_showcase_1793020165334.jpg',
+  },
+  {
+    id: 'cooling-fans',
+    name: 'Cooling & Fans',
+    nameBn: 'কুলিং ও ফ্যান',
+    description: 'ARGB case fans, AIO liquid cooling brackets, thermal pads & laptop coolers',
+    iconName: 'Wind',
+    itemCount: 38,
+    featuredImage: '/images/category_cooling_fan_1793020166097.jpg',
+  },
+  {
+    id: 'power-supply',
+    name: 'Power Supply (PSU)',
+    nameBn: 'পাওয়ার সাপ্লাই (PSU)',
+    description: 'ATX 80+ Bronze, Gold modular power supplies and gaming PSUs',
+    iconName: 'Zap',
+    itemCount: 28,
+    featuredImage: '/images/category_usbc_docking_hub_1793020166283.jpg',
+  },
+  {
+    id: 'storage-devices',
+    name: 'Storage Devices',
+    nameBn: 'স্টোরেজ ডিভাইস',
+    description: 'Ultra-fast external SSDs, high-end USB 3.2 flash drives & memory cards',
+    iconName: 'HardDrive',
+    itemCount: 42,
+    featuredImage: '/images/category_usbc_docking_hub_1793020166283.jpg',
+  },
+  {
+    id: 'networking',
+    name: 'Networking',
+    nameBn: 'নেটওয়ার্কিং',
+    description: 'Wi-Fi 6E dongles, gigabit switches, Bluetooth 5.3 adapters & crimpers',
+    iconName: 'Wifi',
+    itemCount: 31,
+    featuredImage: '/images/hero_setup_showcase_1793020165334.jpg',
+  },
+  {
+    id: 'adapters-converters',
+    name: 'Adapters & Converters',
+    nameBn: 'অ্যাডাপ্টার ও কনভার্টার',
+    description: 'USB-C to Dual 4K HDMI, DisplayPort splitters, OTG adapters & audio DACs',
+    iconName: 'Layers',
+    itemCount: 57,
+    featuredImage: '/images/category_usbc_docking_hub_1793020166283.jpg',
+  },
+  {
+    id: 'gaming-accessories',
+    name: 'Gaming Accessories',
+    nameBn: 'গেমিং এক্সেসরিজ',
+    description: 'Ultra-lightweight gaming mice, coiled aviator cables & mouse bungees',
+    iconName: 'Gamepad2',
+    itemCount: 49,
+    featuredImage: '/images/category_mechanical_keyboard_1793020164307.jpg',
+  },
+  {
+    id: 'smart-desk',
+    name: 'Smart Desk Accessories',
+    nameBn: 'স্মার্ট ডেস্ক এক্সেসরিজ',
+    description: 'Screenbar monitor lights, magnetic cable organizers & RGB desk lamps',
+    iconName: 'Lamp',
+    itemCount: 29,
+    featuredImage: '/images/hero_setup_showcase_1793020165334.jpg',
+  },
+  {
+    id: 'laptop-accessories',
+    name: 'Laptop Accessories',
+    nameBn: 'ল্যাপটপ এক্সেসরিজ',
+    description: 'Ergonomic aluminum laptop stands, 100W PD hubs & protective sleeves',
+    iconName: 'Laptop',
+    itemCount: 36,
+    featuredImage: '/images/category_usbc_docking_hub_1793020166283.jpg',
+  },
+  {
+    id: 'electronic-tools',
+    name: 'Electronic Tools',
+    nameBn: 'ইলেকট্রনিক টুলস',
+    description: 'Precision magnetic screwdriver sets, multimeter kits & thermal testers',
+    iconName: 'Wrench',
+    itemCount: 22,
+    featuredImage: '/images/hero_setup_showcase_1793020165334.jpg',
+  },
+  {
+    id: 'deals-bundles',
+    name: 'Deals & Bundles',
+    nameBn: 'ডিল ও বান্ডেল',
+    description: 'Pro streamer desk setup kits, mechanical keyboard & mouse combos',
+    iconName: 'Tag',
+    itemCount: 16,
+    featuredImage: '/images/hero_setup_showcase_1793020165334.jpg',
+  },
+];
